@@ -1,0 +1,35 @@
+# Message sorting options
+set sort=reverse-threads
+set sort_aux=last-date-received
+
+set pager_stop              = yes   # don't go to next page automatically
+set menu_scroll             = yes   # scroll in menus
+
+color tree yellow default           # thread arrow color
+
+# Message index color settings
+## ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
+## ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread)
+color index cyan default "~U"       	# unread messages
+color index red default "~D"        	# deleted messages
+color index black yellow "~P"			# messages from me
+color index black cyan "~p"				# messages to me
+
+# Message body color settings
+## Reply depth
+color body yellow default '^[>:#].*'
+color body green default '^[>:#]\s*[>:#].*'
+color body red default '^[>:#]\s*[>:#]\s*>.*'
+
+color header yellow black '^To:.*'
+color header yellow black '^Cc:.*'
+
+# Extra tweaks
+## Thread settings
+unset collapse_unread           # disallow collapsing of threads with unread messages
+bind index - collapse-thread
+bind index _ collapse-all
+
+## On startup
+exec first-entry                # go to first entry
+exec collapse-all
