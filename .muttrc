@@ -2,34 +2,66 @@
 set sort=reverse-threads
 set sort_aux=last-date-received
 
-set pager_stop              = yes   # don't go to next page automatically
-set menu_scroll             = yes   # scroll in menus
+# Index color settings <START>
+# ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
+# ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread)
 
-color tree yellow default           # thread arrow color
+color tree yellow default    # thread arrow color
+color indicator black yellow # select bar color
+color status black yellow    # status/mode bar color
 
-# Message index color settings
-## ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
-## ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread)
-color index cyan default "~U"       	# unread messages
-color index red default "~D"        	# deleted messages
-color index black yellow "~P"			# messages from me
-color index black cyan "~p"				# messages to me
+## General purpose, to be overwritten by settings below
+color index blue default "~U" # unread messages
+color index black yellow "~p" # messages to me
 
-# Message body color settings
-## Reply depth
-color body yellow default '^[>:#].*'
-color body green default '^[>:#]\s*[>:#].*'
-color body red default '^[>:#]\s*[>:#]\s*>.*'
+## General purpose with highest precedence
+color index magenta default  "~P" # messages from me
+color index red default "~D"      # deleted messages
 
+# Index color settings <END>
+# Message view color settings <START>
+color quoted yellow default
+color quoted1 green default
+color quoted2 red default
+color quoted3 brightblue default
+
+color hdrdefault brightwhite black
 color header yellow black '^To:.*'
 color header yellow black '^Cc:.*'
+color header brightblack black "^User-Agent:.*"
+# Message view color settings <END>
+
+# Macros
+## Bounce message to spam and delete
+macro index B "<bounce-message>spam<enter><enter><delete-message>"
+
+## Show all messages
+macro index <F3> "<limit>a<enter><collapse-all><first-entry>"
+## Unread messages
+macro index <F4> "<limit>~U<enter><first-entry>"
+## Messages to me
+macro index <F5> "<limit>~p<enter><first-entry>"
+## Unread messages to me
+macro index <F6> "<limit>~U ~p<enter><first-entry>"
+## Flagged
+macro index <F8> "<limit>~F<enter><first-entry>"
 
 # Extra tweaks
+set menu_scroll				= yes   # scroll in menus instead of flipping pages
+set editor					= 'vim' # use vim to edit messages
+
+## Pager settings
+set pager_context			= 10	# 5 lines of text overlap between pages
+set pager_stop              = yes   # don't go to next page automatically
+set tilde					= yes	# vim-like EOF
+set pager_index_lines		= 12	# show context messages on either side of current message
+
 ## Thread settings
-unset collapse_unread           # disallow collapsing of threads with unread messages
+unset collapse_unread           	# disallow collapsing of threads with unread messages
 bind index - collapse-thread
 bind index _ collapse-all
 
 ## On startup
-exec first-entry                # go to first entry
-exec collapse-all
+exec first-entry                	# go to first entry
+exec collapse-all					# collapse all threads without unread messages
+
