@@ -6,35 +6,41 @@ set sort_aux=last-date-received
 # ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
 # ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread)
 
-color tree yellow default    # thread arrow color
-color indicator black yellow # select bar color
-color status black yellow    # status/mode bar color
+color tree color214 default    # thread arrow color
+color indicator black color39  # select bar color
+color status color145 color235 # status/mode bar color
 
 ## General purpose, to be overwritten by settings below
-color index blue default "~U" # unread messages
-color index black yellow "~p" # messages to me
+color index color39 default "~U" # unread messages
+
+# General
+color index color214 default "~b '[Gg]abc[aioe]' | ~b '[Gg]abik[ao]' | ~b '[Kk]andov[aeou]'" # mentions
+color index black color173 "~p"                                                              # messages to me
+color index color114 default "~F"                                                            # flagged
 
 ## General purpose with highest precedence
-color index magenta default  "~P" # messages from me
-color index red default "~D"      # deleted messages
+color index color170 default  "~P"                   # messages from me, orig 198
+color index red default "~D"                         # deleted messages
+color index color170 default "~f kandova ~t kandova" # debug mail
+color index black color170 "~s STDERR ~t xkandova"   # STDERR
 
 # Index color settings <END>
 # Message view color settings <START>
-color quoted yellow default
-color quoted1 green default
+color quoted color214 default
+color quoted1 color114 default
 color quoted2 red default
-color quoted3 brightblue default
+color quoted3 color39 default
 
-color hdrdefault brightwhite black
-color header yellow black '^To:.*'
-color header yellow black '^Cc:.*'
-color header brightblack black "^User-Agent:.*"
+color hdrdefault default color235
+color header color114 color235 'From'
+color header color39 color235 'To'
+color header color173 color235 'Cc'
+color header brightcolor204 color235 'Subject'
 # Message view color settings <END>
 
 # Macros
 ## Bounce message to spam and delete
 macro index B "<bounce-message>spam<enter><enter><delete-message>"
-
 ## Show all messages
 macro index <F3> "<limit>a<enter><collapse-all><first-entry>"
 ## Unread messages
@@ -47,21 +53,26 @@ macro index <F6> "<limit>~U ~p<enter><first-entry>"
 macro index <F8> "<limit>~F<enter><first-entry>"
 
 # Extra tweaks
-set menu_scroll				= yes   # scroll in menus instead of flipping pages
-set editor					= 'vim' # use vim to edit messages
+set menu_scroll       = yes   # scroll in menus instead of flipping pages
+set editor            = 'vim' # use vim to edit messages
 
 ## Pager settings
-set pager_context			= 10	# 5 lines of text overlap between pages
-set pager_stop              = yes   # don't go to next page automatically
-set tilde					= yes	# vim-like EOF
-set pager_index_lines		= 12	# show context messages on either side of current message
+set pager_context     = 12  # 6 lines of text overlap between pages
+set pager_stop        = yes # don't go to next page automatically
+set tilde             = yes # vim-like EOF
+set pager_index_lines = 8   # show context messages on either side of current message
+set smart_wrap        = yes # wrap text
+
+## Custom headers
+my_hdr Bcc: example@example.com # store sent messages
+hdr_order From: Subject: To: Cc: Date:
 
 ## Thread settings
-unset collapse_unread           	# disallow collapsing of threads with unread messages
+unset collapse_unread # disallow collapsing of threads with unread messages
 bind index - collapse-thread
 bind index _ collapse-all
 
 ## On startup
-exec first-entry                	# go to first entry
-exec collapse-all					# collapse all threads without unread messages
+exec first-entry  # go to first entry
+exec collapse-all # collapse all threads without unread messages
 
