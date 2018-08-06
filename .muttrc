@@ -1,78 +1,121 @@
-# Message sorting options
+# ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
+# ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread) ~(?) (thread with ?)
+# ~y (label)
+
+# TODO: use = instead of ~ when there's no need for regular expressions
+
+# MESSAGE SORTING
 set sort=reverse-threads
 set sort_aux=last-date-received
 
-# Index color settings <START>
-# ~t (to) ~c (copy) ~f (from) ~b (body) ~s (subject) ~p (to me) ~P (from me) ~h (header)
-# ~N (new) ~O (old) ~R (read) ~U (unread) ~v (in collapsed thread)
-
+# INDEX COLOR SETTINGS <START>
 color tree color214 default    # thread arrow color
 color indicator black color39  # select bar color
 color status color145 color235 # status/mode bar color
 
-## General purpose, to be overwritten by settings below
-color index color39 default "~U" # unread messages
+## Not interesting but labeled -- default
+color index default default "~R ~(=y 'useful')"
+color index default default "~R ~(=y 'stalk')"
 
-# General
-color index color214 default "~b '[Gg]abc[aioe]' | ~b '[Gg]abik[ao]' | ~b '[Kk]andov[aeou]'" # mentions
-color index black color173 "~p"                                                              # messages to me
-color index color114 default "~F"                                                            # flagged
+## My applications
+color index brightcolor114 default "~(=y 'moje')"
+color index black color114 "~U ~(=y 'moje')"
+
+## General purpose
+color index color214 default "~b '[Gg]abc[aioe]' | ~b '[Gg]abik[ao]' | ~b '[Kk]andov[aeou]'" # mentions in body
+color index color180 default "~(~t kandova | ~c kandova | ~f kandova)"                       # thread with me
+color index brightcolor173 default "~t kandova | ~c kandova"                                 # messages to me
+color index black color173 "~U (~t kandova | ~c kandova)"                                    # UNREAD - to me or cc
+
+color index brightcolor114 default "=y 'moje'"
+color index black color114 "~U =y 'moje'"
+
+## Important org info
+color index color235 color145 "~(=y 'info')
 
 ## General purpose with highest precedence
 color index color170 default  "~P"                   # messages from me, orig 198
-color index red default "~D"                         # deleted messages
 color index color170 default "~f kandova ~t kandova" # debug mail
-color index black color170 "~s STDERR ~t xkandova"   # STDERR
+color index black color170 "~s ^STDERR ~t kandova"   # STDERR
+color index black color180 "~F"                      # flagged
+color index black color180 "~v~(~F)"                 # collapsed thread with flagged
+color index red default "~D"                         # deleted messages
+color index color170 default "=s STDERR =y arch"     # archived STDERR
+# INDEX COLOR SETTINGS <END>
 
-# Index color settings <END>
-# Message view color settings <START>
+# MESSAGE VIEW COLOR SETTINGS <START>
 color quoted color214 default
 color quoted1 color114 default
-color quoted2 red default
+color quoted2 color204 default
 color quoted3 color39 default
+
+color signature color39 default
 
 color hdrdefault default color235
 color header color114 color235 'From'
 color header color39 color235 'To'
 color header color173 color235 'Cc'
 color header brightcolor204 color235 'Subject'
-# Message view color settings <END>
+# MESSAGE VIEW COLOR SETTINGS <END>
 
-# Macros
+# MACROS
 ## Bounce message to spam and delete
 macro index B "<bounce-message>spam<enter><enter><delete-message>"
 ## Show all messages
 macro index <F3> "<limit>a<enter><collapse-all><first-entry>"
 ## Unread messages
-macro index <F4> "<limit>~U<enter><first-entry>"
+macro index <F4> "<limit>~(~U)<enter><first-entry>"
 ## Messages to me
-macro index <F5> "<limit>~p<enter><first-entry>"
+macro index <F5> "<limit>~(~p)<enter><first-entry>"
 ## Unread messages to me
-macro index <F6> "<limit>~U ~p<enter><first-entry>"
+macro index <F6> "<limit>~(~U ~p)<enter><first-entry>"
+## My applications
+macro index <F7> "<limit>~(~y moje)<enter><first-entry>"
 ## Flagged
-macro index <F8> "<limit>~F<enter><first-entry>"
+macro index <F8> "<limit>~F | ~(~F)<enter><first-entry>"
 
-# Extra tweaks
-set menu_scroll       = yes   # scroll in menus instead of flipping pages
-set editor            = 'vim' # use vim to edit messages
+## LABELS
+macro index y "<enter-command>set editor=\"~/Scripts/editlabel append\"\n\
+<edit><sync-mailbox>\
+<enter-command>set editor=vim\n" "Append label"
+macro pager y "<enter-command>set editor=\"~/Scripts/editlabel append\"\n\
+<edit><sync-mailbox>\
+<enter-command>set editor=vim\n" "Append label"
+macro index Y "<enter-command>set editor=\"~/Scripts/editlabel menu\"\n\
+<edit><sync-mailbox>\
+<enter-command>set editor=vim\n" "Edit labels"
+macro pager Y "<enter-command>set editor=\"~/Scripts/editlabel menu\"\n\
+<edit><sync-mailbox>\
+<enter-command>set editor=vim\n" "Edit labels"
 
-## Pager settings
-set pager_context     = 12  # 6 lines of text overlap between pages
-set pager_stop        = yes # don't go to next page automatically
-set tilde             = yes # vim-like EOF
-set pager_index_lines = 8   # show context messages on either side of current message
-set smart_wrap        = yes # wrap text
+# ALIASES
+set alias_file        = ~/.mutt/aliases
+set sort_alias        = alias
+set reverse_alias     = yes
+source $alias_file
 
-## Custom headers
-my_hdr Bcc: example@example.com # store sent messages
+# TWEAKS
+set menu_scroll       = yes            # scroll in menus instead of flipping pages
+set editor            = 'vim'          # use vim to edit messages
+set index_format      = " %Z | %-20.20L | %[!%d. %B %a] | %?y?{%Y} ?%s"
+
+## PAGER
+set pager_context     = 12             # lines of text overlap between pages
+set pager_stop        = yes            # don't go to next page automatically
+set tilde             = yes            # vim-like EOF
+set pager_index_lines = 8              # show context messages on either side of current message
+set smart_wrap        = yes            # wrap text
+
+## HEADERS
+my_hdr Bcc: example@mail.com           # store sent messages
 hdr_order From: Subject: To: Cc: Date:
 
-## Thread settings
-unset collapse_unread # disallow collapsing of threads with unread messages
+## THREADS
+unset collapse_unread                  # disallow collapsing of threads with unread messages
 bind index - collapse-thread
 bind index _ collapse-all
 
-## On startup
-exec first-entry  # go to first entry
-exec collapse-all # collapse all threads without unread messages
-
+##STARTUP
+exec first-entry                       # go to first entry
+exec collapse-all                      # collapse all threads without unread messages
+# push X
