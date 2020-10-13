@@ -50,7 +50,6 @@ highlight ColorColumn ctermbg=239
 highlight GitGutterAdd ctermbg=114 ctermfg=236
 highlight GitGutterDelete ctermbg=203 ctermfg=236
 
-# Show whitespace
 set list lcs=trail:·,tab:⇀\ ,nbsp:␣,precedes:«,extends:»
 
 " Use 2 spaces in yaml
