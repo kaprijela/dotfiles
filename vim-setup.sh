@@ -11,10 +11,12 @@ PLUGINS=(
 )
 
 # create folders if not present
+echo "Preparing folders"
 mkdir -p $PLUGIN_FOLDER $AUTOLOAD_FOLDER
 
 # set up pathogen
 if [ ! -e ${AUTOLOAD_FOLDER}/pathogen.vim ]; then
+	echo "Setting up Pathogen"
 	curl -LSso ${AUTOLOAD_FOLDER}/pathogen.vim "https://tpo.pe/pathogen.vim"
 fi
 
