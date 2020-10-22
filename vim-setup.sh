@@ -46,3 +46,5 @@ done
 echo "Copying .vimrc"
 cd $OLDPWD
 cp .vimrc ~/.vimrc
+
+echo "... done."
