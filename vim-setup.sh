@@ -7,7 +7,7 @@ PLUGINS=(
 	"vim-gitgutter"
 	"vim-indent-guides"
 	"tabular"
-	"palenight"
+	"palenight.vim"
 )
 
 # create folders if not present
@@ -37,8 +37,7 @@ for PLUGIN in "${PLUGINS[@]}"; do
 			git clone "https://github.com/valloric/vim-indent-guides"
 		elif [ "$PLUGIN" = "tabular" ]; then
 			git clone "https://github.com/godlygeek/tabular"
-		elif [ "$PLUGIN" = "palenight" ]; then
-			# TODO: fix palenight fail if already exists
+		elif [ "$PLUGIN" = "palenight.vim" ]; then
 			git clone "https://github.com/drewtempelmeyer/palenight.vim"
 		fi
 	fi
