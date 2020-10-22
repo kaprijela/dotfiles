@@ -42,3 +42,7 @@ for PLUGIN in "${PLUGINS[@]}"; do
 		fi
 	fi
 done
+
+echo "Copying .vimrc"
+cd $OLDPWD
+cp .vimrc ~/.vimrc
