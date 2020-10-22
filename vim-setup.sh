@@ -36,7 +36,7 @@ for PLUGIN in "${PLUGINS[@]}"; do
 		elif [ "$PLUGIN" = "tabular" ]; then
 			git clone "https://github.com/godlygeek/tabular"
 		elif [ "$PLUGIN" = "palenight" ]; then
-			git clone "git clone https://github.com/drewtempelmeyer/palenight.vim"
+			git clone "https://github.com/drewtempelmeyer/palenight.vim"
 		fi
 	fi
 done
