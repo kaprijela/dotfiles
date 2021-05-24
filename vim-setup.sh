@@ -43,8 +43,13 @@ for PLUGIN in "${PLUGINS[@]}"; do
 	fi
 done
 
+cd $OLDPWD || exit
+
+if [ -e ~/.vimrc ]; then
+	echo "Backing up previous .vimrc to .vimrc.old"
+	mv ~/.vimrc ~/.vimrc.old
+fi
 echo "Copying .vimrc"
-cd $OLDPWD
 cp .vimrc ~/.vimrc
 
 echo "... done."
