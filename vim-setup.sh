@@ -8,6 +8,7 @@ PLUGINS=(
 	"vim-indent-guides"
 	"tabular"
 	"palenight.vim"
+	"gruvbox"
 )
 
 # create folders if not present
@@ -39,6 +40,8 @@ for PLUGIN in "${PLUGINS[@]}"; do
 			git clone "https://github.com/godlygeek/tabular"
 		elif [ "$PLUGIN" = "palenight.vim" ]; then
 			git clone "https://github.com/drewtempelmeyer/palenight.vim"
+		elif [ "$PLUGIN" = "gruvbox" ]; then
+			git clone "https://github.com/morhetz/gruvbox"
 		fi
 	fi
 done
